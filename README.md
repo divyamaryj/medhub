@@ -14,6 +14,7 @@
 - Member 2: Divya Mary John - College of Engineering,Kallooppara
 
 ### Hosted Project Link
+https://github.com/divyamaryj/medhub.git
 
 
 ### Project Description
@@ -85,14 +86,20 @@ List the key features of your project:
 
 #### Screenshots (Add at least 3)
 
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+![Screenshot1]Homepage
+It shows the main homepage of the web 'MEDHUB'
+<img width="1910" height="915" alt="screenshot-1771642471766" src="https://github.com/user-attachments/assets/8a69b2a5-0ae6-42de-912c-4dab09a4aaed" />
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+![Screenshot2]Login Page-Admin
+It shows the login page for the admin corner
+<img width="1910" height="915" alt="screenshot-1771642559686" src="https://github.com/user-attachments/assets/d95e7251-af20-4160-8bf4-2ca7e615923c" />
+
+
+![Screenshot3]Login page-Patient
+it shows the login page for the patient/user corner
+<img width="1910" height="915" alt="screenshot-1771642519498" src="https://github.com/user-attachments/assets/cfc0cf39-3930-4bfb-99ee-e47852474b8f" />
+
 
 #### Diagrams
 
