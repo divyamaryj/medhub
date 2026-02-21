@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedHub — Sign Up</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+background:linear-gradient(135deg,#3b82f6,#10b981);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+}
+
+.container{
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(20px);
+padding:40px;
+border-radius:16px;
+width:100%;
+max-width:420px;
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+}
+
+label{
+font-weight:600;
+font-size:14px;
+margin-top:12px;
+display:block;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:6px;
+border:none;
+border-radius:8px;
+outline:none;
+font-size:14px;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:20px;
+background:#10b981;
+border:none;
+border-radius:10px;
+font-weight:700;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#059669;
+transform:translateY(-2px);
+}
+
+.back{
+display:block;
+text-align:center;
+margin-top:15px;
+color:white;
+text-decoration:none;
+opacity:0.8;
+}
+
+.message{
+margin-top:10px;
+text-align:center;
+font-weight:600;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🏥 MedHub Sign Up</h1>
+
+<label>User Type</label>
+<select id="type">
+<option value="patient">Patient</option>
+<option value="admin">Admin</option>
+</select>
+
+<label>Hospital Name (Admin only)</label>
+<input id="hospitalName" placeholder="Hospital name">
+
+<label>Hospital Location (Admin only)</label>
+<input id="hospitalLocation" placeholder="Location">
+
+<label>Email</label>
+<input id="email" type="email" placeholder="your@email.com">
+
+<label>Password</label>
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="signup()">Create Account</button>
+
+<div id="msg" class="message"></div>
+
+<a href="index.html" class="back">← Back to MedHub</a>
+
+</div>
+
+<script>
+function show(msg,color){
+const m=document.getElementById("msg");
+m.textContent=msg;
+m.style.color=color;
+}
+
+function signup(){
+
+const type=document.getElementById("type").value;
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+const hospitalName=document.getElementById("hospitalName").value.trim();
+const hospitalLocation=document.getElementById("hospitalLocation").value.trim();
+
+if(!email || !password){
+show("Fill all fields","yellow");
+return;
+}
+
+if(type==="admin" && (!hospitalName || !hospitalLocation)){
+show("Hospital info required","yellow");
+return;
+}
+
+let users=JSON.parse(localStorage.getItem("hospital_users")||"[]");
+
+if(users.find(u=>u.email===email)){
+show("Email already exists","red");
+return;
+}
+
+const id=Date.now().toString();
+
+users.push({
+id,
+email,
+password,
+type,
+hospitalName:type==="admin"?hospitalName:null,
+hospitalLocation:type==="admin"?hospitalLocation:null
+});
+
+localStorage.setItem("hospital_users",JSON.stringify(users));
+
+let data=JSON.parse(localStorage.getItem("hospital_data")||"{}");
+data[id]={
+icuBeds:0,
+generalBeds:0,
+antivenom:0,
+antibiotics:0,
+bloodUnits:0,
+ventilators:0
+};
+localStorage.setItem("hospital_data",JSON.stringify(data));
+
+let details=JSON.parse(localStorage.getItem("hospital_details")||"{}");
+if(type==="admin"){
+details[id]={name:hospitalName,location:hospitalLocation};
+}
+localStorage.setItem("hospital_details",JSON.stringify(details));
+
+show("Signup successful! Redirecting...","lightgreen");
+
+setTimeout(()=>{
+window.location.href="index.html";
+},1500);
+
+}
+</script>
+
+</body>
+</html>

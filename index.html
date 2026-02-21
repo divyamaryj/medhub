@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedHub - Hospital Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background 0.6s, color 0.6s;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Particle Background */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #f5f3ff 100%);
+            color: #1e293b;
+        }
+
+        body.light-theme.admin-mode {
+            background: linear-gradient(135deg, #ffffff 0%, #dbeafe 25%, #bae6fd 50%, #7dd3fc 75%, #06b6d4 100%);
+            animation: adminGradientShift 8s ease infinite;
+        }
+
+        body.light-theme.patient-mode {
+            background: linear-gradient(135deg, #ffffff 0%, #dcfce7 25%, #bbf7d0 50%, #86efac 75%, #22c55e 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="dna" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M50,10 Q60,30 50,50 T50,90" fill="none" stroke="rgba(16,185,129,0.15)" stroke-width="2"/><path d="M50,10 Q40,30 50,50 T50,90" fill="none" stroke="rgba(16,185,129,0.15)" stroke-width="2"/><circle cx="35" cy="20" r="2" fill="rgba(16,185,129,0.2)"/><circle cx="65" cy="20" r="2" fill="rgba(16,185,129,0.2)"/><circle cx="30" cy="50" r="2" fill="rgba(16,185,129,0.2)"/><circle cx="70" cy="50" r="2" fill="rgba(16,185,129,0.2)"/><circle cx="35" cy="80" r="2" fill="rgba(16,185,129,0.2)"/><circle cx="65" cy="80" r="2" fill="rgba(16,185,129,0.2)"/><line x1="35" y1="20" x2="30" y2="50" stroke="rgba(16,185,129,0.1)" stroke-width="1"/><line x1="65" y1="20" x2="70" y2="50" stroke="rgba(16,185,129,0.1)" stroke-width="1"/><line x1="30" y1="50" x2="35" y2="80" stroke="rgba(16,185,129,0.1)" stroke-width="1"/><line x1="70" y1="50" x2="65" y2="80" stroke="rgba(16,185,129,0.1)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23dna)"/></svg>') center/cover fixed;
+            animation: patientGradientShift 8s ease infinite;
+            background-attachment: fixed;
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #f1f5f9;
+        }
+
+        body.dark-theme.admin-mode {
+            background: linear-gradient(135deg, #0f172a 0%, #0c4a6e 25%, #0e7490 50%, #155e75 75%, #083344 100%);
+            animation: adminGradientShiftDark 8s ease infinite;
+        }
+
+        body.dark-theme.patient-mode {
+            background: linear-gradient(135deg, #0f172a 0%, #143a1f 25%, #15803d 50%, #166534 75%, #052e16 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="dna-dark" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M50,10 Q60,30 50,50 T50,90" fill="none" stroke="rgba(34,197,94,0.2)" stroke-width="2"/><path d="M50,10 Q40,30 50,50 T50,90" fill="none" stroke="rgba(34,197,94,0.2)" stroke-width="2"/><circle cx="35" cy="20" r="2" fill="rgba(34,197,94,0.25)"/><circle cx="65" cy="20" r="2" fill="rgba(34,197,94,0.25)"/><circle cx="30" cy="50" r="2" fill="rgba(34,197,94,0.25)"/><circle cx="70" cy="50" r="2" fill="rgba(34,197,94,0.25)"/><circle cx="35" cy="80" r="2" fill="rgba(34,197,94,0.25)"/><circle cx="65" cy="80" r="2" fill="rgba(34,197,94,0.25)"/><line x1="35" y1="20" x2="30" y2="50" stroke="rgba(34,197,94,0.15)" stroke-width="1"/><line x1="65" y1="20" x2="70" y2="50" stroke="rgba(34,197,94,0.15)" stroke-width="1"/><line x1="30" y1="50" x2="35" y2="80" stroke="rgba(34,197,94,0.15)" stroke-width="1"/><line x1="70" y1="50" x2="65" y2="80" stroke="rgba(34,197,94,0.15)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23dna-dark)"/></svg>') center/cover fixed;
+            animation: patientGradientShiftDark 8s ease infinite;
+            background-attachment: fixed;
+        }
+
+        @keyframes adminGradientShift {
+            0%, 100% { background: linear-gradient(135deg, #ffffff 0%, #dbeafe 25%, #bae6fd 50%, #7dd3fc 75%, #06b6d4 100%); }
+            50% { background: linear-gradient(135deg, #dbeafe 0%, #bae6fd 25%, #7dd3fc 50%, #06b6d4 75%, #0891b2 100%); }
+        }
+
+        @keyframes patientGradientShift {
+            0%, 100% { background: linear-gradient(135deg, #ffffff 0%, #dcfce7 25%, #bbf7d0 50%, #86efac 75%, #22c55e 100%); }
+            50% { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 25%, #86efac 50%, #22c55e 75%, #16a34a 100%); }
+        }
+
+        @keyframes adminGradientShiftDark {
+            0%, 100% { background: linear-gradient(135deg, #0f172a 0%, #0c4a6e 25%, #0e7490 50%, #155e75 75%, #083344 100%); }
+            50% { background: linear-gradient(135deg, #0c4a6e 0%, #0e7490 25%, #155e75 50%, #083344 75%, #082f49 100%); }
+        }
+
+        @keyframes patientGradientShiftDark {
+            0%, 100% { background: linear-gradient(135deg, #0f172a 0%, #143a1f 25%, #15803d 50%, #166534 75%, #052e16 100%); }
+            50% { background: linear-gradient(135deg, #143a1f 0%, #15803d 25%, #166534 50%, #052e16 75%, #051b11 100%); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: transparent(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-theme nav {
+            background: rgba(30, 41, 59, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            animation: pulse-brand 2s ease-in-out infinite;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            background-color: transparent;
+            border: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .nav-brand:hover {
+            transform: scale(1.08);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        @keyframes pulse-brand {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            cursor: pointer;
+            border: none;
+        }
+
+        .nav-link:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-spacer {
+            height: 70px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 16px;
+            right: 20px;
+            width: 75px;
+            height: 75px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 45px;
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.5);
+            animation: float 3s ease-in-out infinite, pulse-shadow 2s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            border: 4px solid white;
+        }
+
+        .light-theme .theme-toggle {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #ffffff;
+            box-shadow: 0 12px 50px rgba(245, 158, 11, 0.5);
+        }
+
+        .dark-theme .theme-toggle {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: #ffffff;
+            box-shadow: 0 12px 50px rgba(59, 130, 246, 0.5);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.25) rotate(30deg);
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.6);
+        }
+
+        @keyframes pulse-shadow {
+            0%, 100% { 
+                box-shadow: 0 12px 50px rgba(0, 0, 0, 0.5);
+            }
+            50% { 
+                box-shadow: 0 12px 80px rgba(0, 0, 0, 0.7);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Glassmorphism Cards */
+        .card {
+            border-radius: 16px;
+            padding: 24px;
+            margin: 16px 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+        }
+
+        .card:hover::before {
+            animation: shimmer 0.6s;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(59, 130, 246, 0.3);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Buttons */
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+            z-index: 0;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            color: white;
+            width: 100%;
+            margin: 10px 0;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+            font-size: 18px;
+            padding: 16px 32px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.5);
+        }
+
+        .admin-mode .btn-primary {
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 50%, #0284c7 100%);
+            box-shadow: 0 8px 24px rgba(6, 182, 212, 0.3);
+        }
+
+        .admin-mode .btn-primary:hover {
+            box-shadow: 0 12px 32px rgba(6, 182, 212, 0.5);
+        }
+
+        .patient-mode .btn-primary {
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #15803d 100%);
+            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+        }
+
+        .patient-mode .btn-primary:hover {
+            box-shadow: 0 12px 32px rgba(34, 197, 94, 0.5);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(220, 38, 38, 0.5);
+        }
+
+        .btn-back {
+            position: fixed;
+            top: 90px;
+            left: 20px;
+            padding: 12px 20px;
+            font-size: 14px;
+            z-index: 99;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            color: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Input Fields */
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 8px 0 16px 0;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin: 16px 0 8px 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Landing Page */
+        .landing {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 70px;
+        }
+
+        .landing h1 {
+            font-size: 72px;
+            margin: 20px 0 15px 0;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 4s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background: linear-gradient(135deg, #3b82f6, #10b981, #3b82f6); }
+            50% { background: linear-gradient(135deg, #10b981, #3b82f6, #10b981); }
+        }
+
+        .landing p {
+            font-size: 20px;
+            margin-bottom: 50px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .landing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .landing-card {
+            padding: 48px 32px;
+            border-radius: 16px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+        }
+
+        .admin-card {
+            border-color: rgba(6, 182, 212, 0.5);
+        }
+
+        .patient-card {
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .landing-card:hover {
+            transform: scale(1.08) translateY(-12px);
+            box-shadow: 0 16px 48px rgba(59, 130, 246, 0.4);
+        }
+
+        .landing-card h2 {
+            font-size: 28px;
+            margin: 20px 0 12px 0;
+            font-weight: 700;
+        }
+
+        .landing-card .emoji {
+            font-size: 64px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .landing-card p {
+            margin: 0;
+            opacity: 0.85;
+        }
+
+        /* Auth Page */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-top: 100px;
+        }
+
+        .auth-form {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .auth-header h2 {
+            font-size: 32px;
+            margin: 20px 0 10px 0;
+            font-weight: 800;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .toggle-signup {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 15px;
+        }
+
+        .toggle-signup a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .toggle-signup a:hover {
+            transform: scale(1.05);
+        }
+
+        .message {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            animation: slideIn 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .message.error {
+            background: rgba(220, 38, 38, 0.2);
+            color: #dc2626;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        /* Dashboard */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .dashboard-header h1 {
+            font-size: 42px;
+            margin: 0;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .admin-mode .dashboard-header h1 {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .patient-mode .dashboard-header h1 {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dashboard-header-left {
+            flex: 1;
+        }
+
+        .user-info {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
+        .hospital-info {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 12px 0;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+            50% { text-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+        }
+
+        .hospital-selector {
+            margin: 24px 0;
+            padding: 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            background: rgba(59, 130, 246, 0.08);
+            animation: slideIn 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .hospital-selector label {
+            margin-bottom: 10px;
+            color: inherit;
+        }
+
+        .hospital-selector select {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .hospital-details {
+            margin: 20px 0;
+            padding: 16px;
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .hospital-details h3 {
+            margin: 0 0 10px 0;
+            color: #3b82f6;
+        }
+
+        .hospital-details p {
+            margin: 5px 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .resource-card {
+            border-radius: 14px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 0.6s ease;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .resource-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(59, 130, 246, 0.3);
+        }
+
+        .resource-card.critical {
+            border: 2px solid #f59e0b;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .resource-card.critical:hover {
+            box-shadow: 0 16px 48px rgba(245, 158, 11, 0.4);
+        }
+
+        .resource-label {
+            font-size: 14px;
+            font-weight: 700;
+            opacity: 0.8;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .resource-value {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .admin-mode .resource-value {
+            background: linear-gradient(135deg, #121213, #0891b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: black;
+            background-clip: text;
+        }
+
+        .patient-mode .resource-value {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .resource-value input {
+            font-size: 48px;
+            font-weight: 800;
+            padding: 8px;
+            margin: 0;
+            border: none;
+            background: transparent;
+            border-bottom: 2px solid #3b82f6;
+        }
+.resource-value input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(59,130,246,0.6);
+}
+        .resource-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .status-icon {
+            font-size: 36px;
+            animation: scale-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scale-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .critical-badge {
+            color: #f97316;
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .unavailable {
+            color: #dc2626;
+            font-weight: 700;
+            margin-top: 12px;
+            animation: shake 0.5s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+
+        /* About Section */
+        .about-section {
+            min-height: 100vh;
+            padding: 100px 20px 60px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-container h1 {
+            font-size: 48px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-container h2 {
+            font-size: 28px;
+            margin: 40px 0 20px 0;
+            color: inherit;
+            font-weight: 700;
+        }
+
+        .about-container p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin: 15px 0;
+            opacity: 0.9;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .about-feature {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .about-feature:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .about-feature h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #3b82f6;
+        }
+
+        .about-feature p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .landing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .landing h1 {
+                font-size: 48px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-back {
+                position: static;
+                margin-bottom: 20px;
+            }
+
+            .theme-toggle {
+                position: static;
+                display: inline-block;
+                margin-bottom: 20px;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Particle Canvas -->
+    <canvas id="particles"></canvas>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <button class="nav-brand" onclick="goToLanding(); return false;" style="background: none; border: none; cursor: pointer;">🏥 MEDHUB</button>
+            <div class="nav-links">
+                <button class="nav-link" onclick="goToLanding(); return false;">HOME</button>
+                <button class="nav-link" onclick="showAbout(); return false;">ABOUT</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Landing Page -->
+    <div id="landing-page">
+        <div class="landing container">
+            <div>
+                <div style="font-size: 80px; margin-bottom: 20px; animation: bounce 2s infinite;">🏥</div>
+                <p style="font-size: 24px; font-weight: 700; margin-bottom: 30px; background: linear-gradient(135deg, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Hospital Resource Management System</p>
+                
+                <div class="landing-grid">
+                    <div class="landing-card admin-card" onclick="goToAuth('admin')">
+                        <div class="emoji">👨‍💼</div>
+                        <h2>ADMIN</h2>
+                        <p>Manage hospital resources with precision</p>
+                    </div>
+                    <div class="landing-card patient-card" onclick="goToAuth('patient')">
+                        <div class="emoji">👤</div>
+                        <h2>PATIENT</h2>
+                        <p>Check real-time hospital availability</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about-page" class="hidden">
+        <div class="about-section">
+            <div class="about-container">
+                <h1>🏥 About MedHub</h1>
+                
+                <p style="font-size: 18px; margin-bottom: 30px;">
+                    MedHub is a real-time hospital resource management system designed to provide transparent, reliable access to critical hospital information for better patient care and hospital operations.
+                </p>
+
+                <h2>🎯 Our Mission</h2>
+                <p>
+                    To revolutionize hospital resource management by providing instant access to real-time inventory data, enabling hospitals to serve patients more efficiently and effectively.
+                </p>
+
+                <h2>✨ Key Features</h2>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <h3>📊 Real-Time Tracking</h3>
+                        <p>Monitor hospital resources instantly with live updates and accurate data.</p>
+                    </div>
+                    <div class="about-feature">
+                        <h3>👥 Dual Portal System</h3>
+                        <p>Separate secure portals for hospital administrators and patients.</p>
+                    </div>
+                    <div class="about-feature">
+                        <h3>🏥 Multi-Hospital Support</h3>
+                        <p>Manage multiple hospitals with their locations and resources seamlessly.</p>
+                    </div>
+                    <div class="about-feature">
+                        <h3>🔐 Secure Authentication</h3>
+                        <p>Encrypted passwords and session management for data security.</p>
+                    </div>
+                    <div class="about-feature">
+                        <h3>🌙 Theme Support</h3>
+                        <p>Beautiful light and dark mode themes for comfortable viewing.</p>
+                    </div>
+                    <div class="about-feature">
+                        <h3>📍 Location Management</h3>
+                        <p>Track hospital locations and manage resources by facility.</p>
+                    </div>
+                </div>
+
+                <h2>🚀 Resources We Track</h2>
+                <p>
+                    <strong>Critical Resources:</strong> ICU Beds, General Beds, Blood Units, Ventilators<br>
+                    <strong>Medical Supplies:</strong> Antivenom Units, Antibiotics, and more
+                </p>
+
+                <h2>💡 Why Choose MedHub?</h2>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li style="margin: 10px 0;">✅ 99.99% Uptime Guarantee</li>
+                    <li style="margin: 10px 0;">✅ Real-Time Data Updates</li>
+                    <li style="margin: 10px 0;">✅ Zero Downtime for Patients</li>
+                    <li style="margin: 10px 0;">✅ User-Friendly Interface</li>
+                    <li style="margin: 10px 0;">✅ Secure & Reliable</li>
+                    <li style="margin: 10px 0;">✅ Beautiful Modern Design</li>
+                </ul>
+
+                <h2>📞 Support</h2>
+                <p>
+                    Have questions? Email us at <strong>support@medhub.com</strong><br>
+                    Phone: <strong>+1-800-MEDHUB-1</strong><br>
+                    Website: <strong>www.medhub.com</strong>
+                </p>
+
+                <p style="text-align: center; margin-top: 40px; opacity: 0.7;">
+                    <strong>Version 1.0</strong> | Built with ❤️ for Better Healthcare
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Page -->
+    <div id="auth-page" class="hidden">
+        <button class="btn-back" onclick="goToLanding()">← BACK</button>
+        
+        <div class="auth-container">
+            <div class="auth-form card">
+                <div class="auth-header">
+                    <p id="auth-type-label" style="opacity: 0.8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;"></p>
+                    <h2 id="auth-title"></h2>
+                </div>
+<nav><a class="nav-link" href="signup.html">SIGN UP</a></nav>
+                <div id="auth-message"></div>
+
+                <div class="form-group" id="hospital-group" style="display: none;">
+                    <label>🏥 Hospital Name</label>
+                    <input id="hospital-input" type="text" placeholder="Enter your hospital name">
+                </div>
+
+                <div class="form-group" id="hospital-location-group" style="display: none;">
+                    <label>📍 Hospital Location</label>
+                    <input id="hospital-location-input" type="text" placeholder="Enter hospital location/address">
+                </div>
+
+                <div class="form-group">
+                    <label>📧 Email Address</label>
+                    <input id="email-input" type="email" placeholder="your@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label>🔐 Password</label>
+                    <input id="password-input" type="password" placeholder="••••••">
+                </div>
+
+                <div class="form-group" id="confirm-group" style="display: none;">
+                    <label>✓ Confirm Password</label>
+                    <input id="confirm-input" type="password" placeholder="••••••">
+                </div>
+
+                <button class="btn-primary" id="auth-btn"></button>
+
+                <div class="toggle-signup">
+                    <span id="toggle-text"></span>
+                    <a href="#" onclick="toggleSignup(event);" id="toggle-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="hidden">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="dashboard-header-left">
+                    <h1 id="dashboard-title"></h1>
+                    <p id="dashboard-subtitle" style="opacity: 0.8; font-size: 16px; margin-top: 8px; font-weight: 500;"></p>
+                    <p class="user-info">👤 Logged in as: <strong id="user-email"></strong></p>
+                    
+                    <!-- Hospital Selector for Patients -->
+                    <div id="hospital-selector-container"></div>
+
+                    <!-- Hospital Details -->
+                    <div id="hospital-details-container"></div>
+                </div>
+                <button class="btn-secondary" onclick="logout()">🚪 LOGOUT</button>
+            </div>
+
+            <div id="dashboard-message"></div>
+
+            <div class="resources-grid" id="resources-container"></div>
+
+            <div id="admin-save-btn" style="display: none;">
+                <button class="btn-primary" onclick="saveChanges()">💾 SAVE ALL CHANGES</button>
+            </div>
+
+            <div id="patient-info" style="display: none;" class="card">
+                <p style="text-align: center; opacity: 0.8; font-size: 16px; font-weight: 500;">ℹ️ Hospital admins update this information in real-time</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // PARTICLE ANIMATION
+        // ============================================
+
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 50;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(59, 130, 246, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles.length = 0;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(59, 130, 246, ${0.1 * (1 - distance / 100)})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            drawConnections();
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        initParticles();
+        animateParticles();
+
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        
+        let state = {
+            currentUser: null,
+            userType: null,
+            isSignup: false,
+            selectedHospitalId: null,
+            hospitalData: {
+                icuBeds: 0,
+                generalBeds: 0,
+                antivenom: 0,
+                antibiotics: 0,
+                bloodUnits: 0,
+                ventilators: 0
+            }
+        };
+
+        function initDatabase() {
+            if (!localStorage.getItem('hospital_users')) {
+                localStorage.setItem('hospital_users', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('hospital_data')) {
+                localStorage.setItem('hospital_data', JSON.stringify({}));
+            }
+            if (!localStorage.getItem('hospital_details')) {
+                localStorage.setItem('hospital_details', JSON.stringify({}));
+            }
+        }
+
+        function checkLoggedIn() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                state.currentUser = JSON.parse(user);
+                state.userType = state.currentUser.type;
+                if (state.userType === 'admin') {
+                    loadHospitalData(state.currentUser.id);
+                }
+                goToDashboard();
+            }
+        }
+
+        function loadHospitalData(userId) {
+            const allData = JSON.parse(localStorage.getItem('hospital_data') || '{}');
+            if (allData[userId]) {
+                state.hospitalData = { ...allData[userId] };
+            }
+        }
+
+        function loadHospitalDataAsPatient(hospitalAdminId) {
+            const allData = JSON.parse(localStorage.getItem('hospital_data') || '{}');
+            if (allData[hospitalAdminId]) {
+                state.hospitalData = { ...allData[hospitalAdminId] };
+            } else {
+                state.hospitalData = {
+                    icuBeds: 0,
+                    generalBeds: 0,
+                    antivenom: 0,
+                    antibiotics: 0,
+                    bloodUnits: 0,
+                    ventilators: 0
+                };
+            }
+        }
+
+        function saveHospitalData() {
+            const allData = JSON.parse(localStorage.getItem('hospital_data') || '{}');
+            allData[state.currentUser.id] = state.hospitalData;
+            localStorage.setItem('hospital_data', JSON.stringify(allData));
+        }
+
+        function goToLanding() {
+            document.body.classList.remove('admin-mode', 'patient-mode');
+            document.getElementById('landing-page').classList.remove('hidden');
+            document.getElementById('about-page').classList.add('hidden');
+            document.getElementById('auth-page').classList.add('hidden');
+            document.getElementById('dashboard-page').classList.add('hidden');
+            state.isSignup = false;
+        }
+
+        function goToAuth(type) {
+            state.userType = type;
+            state.isSignup = false;
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('auth-page').classList.remove('hidden');
+            document.getElementById('dashboard-page').classList.add('hidden');
+            renderAuth();
+        }
+
+        function goToDashboard() {
+            if (state.userType === 'admin') {
+                document.body.classList.add('admin-mode');
+                document.body.classList.remove('patient-mode');
+            } else {
+                document.body.classList.add('patient-mode');
+                document.body.classList.remove('admin-mode');
+            }
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('auth-page').classList.add('hidden');
+            document.getElementById('dashboard-page').classList.remove('hidden');
+            renderDashboard();
+        }
+
+        function toggleSignup(e) {
+            e.preventDefault();
+            state.isSignup = !state.isSignup;
+            renderAuth();
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            document.body.classList.toggle('dark-theme');
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = document.body.classList.contains('light-theme') ? '🌙' : '☀️';
+        }
+
+        function showAbout() {
+            document.body.classList.remove('admin-mode', 'patient-mode');
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('about-page').classList.remove('hidden');
+            document.getElementById('auth-page').classList.add('hidden');
+            document.getElementById('dashboard-page').classList.add('hidden');
+        }
+
+        function handleSignup() {
+            const email = document.getElementById('email-input').value.trim();
+            const password = document.getElementById('password-input').value;
+            const confirmPassword = document.getElementById('confirm-input').value;
+            const hospitalName = document.getElementById('hospital-input').value.trim();
+            const hospitalLocation = document.getElementById('hospital-location-input').value.trim();
+
+            if (!email || !password || !confirmPassword) {
+                showMessage('❌ All fields are required', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage('❌ Passwords do not match', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('❌ Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            if (state.userType === 'admin' && !hospitalName) {
+                showMessage('❌ Hospital name is required', 'error');
+                return;
+            }
+
+            if (state.userType === 'admin' && !hospitalLocation) {
+                showMessage('❌ Hospital location is required', 'error');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('hospital_users') || '[]');
+            if (users.find(u => u.email === email)) {
+                showMessage('❌ Email already registered', 'error');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now().toString(),
+                email,
+                password,
+                type: state.userType,
+                hospitalName: state.userType === 'admin' ? hospitalName : null,
+                hospitalLocation: state.userType === 'admin' ? hospitalLocation : null
+            };
+
+            users.push(newUser);
+            localStorage.setItem('hospital_users', JSON.stringify(users));
+
+            const allData = JSON.parse(localStorage.getItem('hospital_data') || '{}');
+            allData[newUser.id] = state.hospitalData;
+            localStorage.setItem('hospital_data', JSON.stringify(allData));
+
+            const details = JSON.parse(localStorage.getItem('hospital_details') || '{}');
+            if (state.userType === 'admin') {
+                details[newUser.id] = { name: hospitalName, location: hospitalLocation };
+            }
+            localStorage.setItem('hospital_details', JSON.stringify(details));
+
+            state.currentUser = { id: newUser.id, email: newUser.email, type: newUser.type, hospitalName: newUser.hospitalName, hospitalLocation: newUser.hospitalLocation };
+            
+            if (state.userType === 'admin') {
+                loadHospitalData(newUser.id);
+            } else {
+                state.selectedHospitalId = null;
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
+
+            goToDashboard();
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('email-input').value.trim();
+            const password = document.getElementById('password-input').value;
+
+            if (!email || !password) {
+                showMessage('❌ Email and password are required', 'error');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('hospital_users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password && u.type === state.userType);
+
+            if (!user) {
+                showMessage('❌ Invalid credentials', 'error');
+                return;
+            }
+
+            state.currentUser = { id: user.id, email: user.email, type: user.type, hospitalName: user.hospitalName, hospitalLocation: user.hospitalLocation };
+            
+            if (state.userType === 'admin') {
+                loadHospitalData(user.id);
+            } else {
+                state.selectedHospitalId = null;
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
+
+            goToDashboard();
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            state.currentUser = null;
+            state.selectedHospitalId = null;
+            goToLanding();
+        }
+
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('auth-message');
+            msgDiv.innerHTML = `<div class="message ${type}">${msg}</div>`;
+        }
+
+        function showDashboardMessage(msg, type) {
+            const msgDiv = document.getElementById('dashboard-message');
+            msgDiv.innerHTML = `<div class="message ${type}">${msg}</div>`;
+            setTimeout(() => {
+                msgDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        function renderHospitalSelector(hospitals) {
+            const container = document.getElementById('hospital-selector-container');
+            
+            if (hospitals.length === 0) {
+                container.innerHTML = '<div class="hospital-selector"><p>No hospitals registered yet</p></div>';
+                return;
+            }
+
+            const details = JSON.parse(localStorage.getItem('hospital_details') || '{}');
+
+            let selectorHtml = `
+                <div class="hospital-selector">
+                    <label for="hospital-select">🏥 Select Hospital:</label>
+                    <select id="hospital-select" onchange="changeHospital(this.value)">
+            `;
+
+            hospitals.forEach(hospital => {
+                const selected = hospital.id === state.selectedHospitalId ? 'selected' : '';
+                const detail = details[hospital.id] || {};
+                const label = `${hospital.hospitalName} - ${detail.location || 'Location not specified'}`;
+                selectorHtml += `<option value="${hospital.id}" ${selected}>${label}</option>`;
+            });
+
+            selectorHtml += `</select></div>`;
+
+            container.innerHTML = selectorHtml;
+        }
+
+        function renderHospitalDetails() {
+            const container = document.getElementById('hospital-details-container');
+            const isAdmin = state.userType === 'admin';
+            
+            if (isAdmin) {
+                container.innerHTML = `
+                    <div class="hospital-details">
+                        <h3>🏥 Hospital Information</h3>
+                        <p><strong>Name:</strong> ${state.currentUser.hospitalName}</p>
+                        <p><strong>📍 Location:</strong> ${state.currentUser.hospitalLocation}</p>
+                    </div>
+                `;
+            } else if (state.selectedHospitalId) {
+                const users = JSON.parse(localStorage.getItem('hospital_users') || '[]');
+                const selectedHospital = users.find(u => u.id === state.selectedHospitalId);
+                const details = JSON.parse(localStorage.getItem('hospital_details') || '{}');
+                const detail = details[state.selectedHospitalId] || {};
+
+                if (selectedHospital) {
+                    container.innerHTML = `
+                        <div class="hospital-details">
+                            <h3>🏥 Hospital Information</h3>
+                            <p><strong>Name:</strong> ${selectedHospital.hospitalName}</p>
+                            <p><strong>📍 Location:</strong> ${detail.location || 'Location not specified'}</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function changeHospital(hospitalId) {
+            state.selectedHospitalId = hospitalId;
+            loadHospitalDataAsPatient(hospitalId);
+            renderDashboard();
+        }
+
+        function renderAuth() {
+            const isAdmin = state.userType === 'admin';
+            document.getElementById('auth-type-label').textContent = isAdmin ? '👨‍💼 HOSPITAL ADMIN' : '👤 PATIENT';
+            document.getElementById('auth-title').textContent = state.isSignup ? 'CREATE ACCOUNT' : 'LOGIN';
+            document.getElementById('hospital-group').style.display = state.isSignup && isAdmin ? 'block' : 'none';
+            document.getElementById('hospital-location-group').style.display = state.isSignup && isAdmin ? 'block' : 'none';
+            document.getElementById('confirm-group').style.display = state.isSignup ? 'block' : 'none';
+            document.getElementById('auth-btn').innerHTML = state.isSignup ? '<span>✅ SIGN UP</span>' : '<span>🔓 LOGIN</span>';
+            document.getElementById('auth-btn').onclick = state.isSignup ? handleSignup : handleLogin;
+            document.getElementById('toggle-text').textContent = state.isSignup ? 'Already have an account? ' : "Don't have an account? ";
+            document.getElementById('toggle-link').textContent = state.isSignup ? 'Login' : 'Sign Up';
+            document.getElementById('auth-message').innerHTML = '';
+        }
+
+        function renderDashboard() {
+            const isAdmin = state.userType === 'admin';
+            document.getElementById('dashboard-title').textContent = isAdmin ? 'ADMIN PANEL' : 'PATIENT DASHBOARD';
+            
+            let subtitle = '';
+            if (isAdmin) {
+                subtitle = `📍 Managing: ${state.currentUser.hospitalName || 'Hospital'}`;
+            } else {
+                const allUsers = JSON.parse(localStorage.getItem('hospital_users') || '[]');
+                const hospitals = allUsers.filter(u => u.type === 'admin');
+                
+                if (hospitals.length === 0) {
+                    subtitle = 'No hospitals available';
+                } else {
+                    if (!state.selectedHospitalId) {
+                        state.selectedHospitalId = hospitals[0].id;
+                        loadHospitalDataAsPatient(hospitals[0].id);
+                    }
+                    const selectedHospital = hospitals.find(h => h.id === state.selectedHospitalId);
+                    subtitle = selectedHospital ? `📍 Viewing: ${selectedHospital.hospitalName}` : 'Select a hospital';
+                    renderHospitalSelector(hospitals);
+                }
+            }
+            
+            document.getElementById('dashboard-subtitle').textContent = subtitle;
+            document.getElementById('user-email').textContent = state.currentUser.email;
+            document.getElementById('admin-save-btn').style.display = isAdmin ? 'block' : 'none';
+            document.getElementById('patient-info').style.display = isAdmin ? 'none' : 'block';
+
+            renderHospitalDetails();
+
+            const resources = [
+                { key: 'icuBeds', label: '🏥 ICU Beds', critical: true },
+                { key: 'generalBeds', label: '🏥 General Beds', critical: true },
+                { key: 'antivenom', label: '💉 Antivenom Units', critical: false },
+                { key: 'antibiotics', label: '💊 Antibiotics', critical: false },
+                { key: 'bloodUnits', label: '🩸 Blood Units', critical: true },
+                { key: 'ventilators', label: '🌬️ Ventilators', critical: true }
+            ];
+
+            let html = '';
+            resources.forEach((resource, index) => {
+                const value = state.hospitalData[resource.key] || 0;
+                const available = value > 0;
+
+                html += `
+                    <div class="resource-card ${resource.critical ? 'critical' : ''}" style="animation-delay: ${index * 0.1}s;">
+                        <div class="resource-label">${resource.label}</div>
+                        <div class="resource-value">
+                            ${isAdmin ? `<input type="number" min="0" value="${value}" onchange="updateField('${resource.key}', this.value)">` : value}
+                        </div>
+                        <div class="resource-status">
+                            <div>${resource.critical ? '<span class="critical-badge">🔴 CRITICAL</span>' : ''}</div>
+                            <div class="status-icon">${isAdmin ? '✏️' : (available ? '✅' : '❌')}</div>
+                        </div>
+                        ${!available && !isAdmin ? '<div class="unavailable">NOT AVAILABLE</div>' : ''}
+                    </div>
+                `;
+            });
+
+            document.getElementById('resources-container').innerHTML = html;
+        }
+
+        function updateField(key, value) {
+            state.hospitalData[key] = Math.max(0, parseInt(value) || 0);
+        }
+
+        function saveChanges() {
+            saveHospitalData();
+            showDashboardMessage('✅ DATA SAVED SUCCESSFULLY!', 'success');
+        }
+
+        initDatabase();
+        checkLoggedIn();
+        
+    </script>
+</body>
+</html>
