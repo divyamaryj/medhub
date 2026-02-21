@@ -14,8 +14,7 @@
 - Member 2: Divya Mary John - College of Engineering,Kallooppara
 
 ### Hosted Project Link
-https://github.com/divyamaryj/medhub.git
-
+https://medhub-phi.vercel.app/
 
 ### Project Description
 MedHub is a web-based hospital resource management system that provides real-time visibility into critical resources like ICU beds, ventilators, and medicines. It enables administrators to update availability and allows patients to quickly check hospital status for better decision-making during emergencies.
