@@ -88,9 +88,46 @@ it shows the login page for the patient/user corner
 #### Diagrams
 
 **System Architecture:**
-
-![Architecture Diagram](docs/architecture.png)
-*Explain your system architecture - components, data flow, tech stack interaction*
+        ┌──────────────┐
+        │   User        │
+        │ (Browser)     │
+        └──────┬───────┘
+               │
+               ▼
+        ┌──────────────┐
+        │  index.html   │
+        │ Landing Page  │
+        └──────┬───────┘
+        ┌──────┴───────────────┐
+        │                      │
+        ▼                      ▼
+┌──────────────┐      ┌────────────────┐
+│ signup.html  │      │ patient.html   │
+│ Admin Login  │      │ Patient View   │
+└──────┬───────┘      └──────┬─────────┘
+       │                      │
+       ▼                      │
+┌──────────────┐              │
+│ admin.html   │              │
+│ Admin Panel  │              │
+└──────┬───────┘              │
+       │                      │
+       └──────────┬───────────┘
+                  ▼
+            ┌───────────┐
+            │  app.js   │
+            │ JS Logic  │
+            └─────┬─────┘
+                  ▼
+            ┌───────────┐
+            │ server.js │
+            │ Backend   │
+            └─────┬─────┘
+                  ▼
+            ┌───────────┐
+            │ database  │
+            │ SQLite DB │
+            └───────────┘
 
 **Application Workflow:**
 
@@ -125,34 +162,6 @@ it shows the login page for the patient/user corner
 {
   "status": "success"
 }
-
-
-
-#### Build Photos
-
-![Team](Add photo of your team here)
-
-![Components](Add photo of your components here)
-*List out all components shown*
-
-![Build](Add photos of build process here)
-*Explain the build steps*
-
-![Final](Add photo of final product here)
-*Explain the final build*
-
----
-
-
-
-
-
-**Basic Usage:**
-```bash
-python script.py [options] [arguments]
-```
-
-
 
 
 ## AI Tools Used (Optional - For Transparency Bonus)
