@@ -131,7 +131,66 @@ it shows the login page for the patient/user corner
 
 **Application Workflow:**
 
-![Workflow](docs/workflow.png)
+START
+  │
+  ▼
+User opens website
+(index.html)
+  │
+  ├───────────────┐
+  │               │
+  ▼               ▼
+Admin chooses     Patient chooses
+Admin Corner      Patient Corner
+  │               │
+  ▼               ▼
+signup.html       patient.html loads
+(Admin login)     │
+  │               │
+Login success     App requests data
+  │               │
+  ▼               ▼
+admin.html        server.js fetches
+(Admin dashboard) database records
+  │               │
+Admin enters      ▼
+ICU / Beds /      Patient sees
+Antivenom /       live resources
+Departments       │
+  │               │
+  ▼               │
+app.js sends      │
+update request    │
+  │               │
+  ▼               │
+server.js updates │
+database.db       │
+  │               │
+  └───────Data available────────┘
+  │
+  ▼
+END
+
+
+Admin Workflow
+
+Admin logs in through signup page
+
+Admin opens dashboard
+
+Enters hospital resource data
+
+System sends update to backend
+
+Database stores information
+
+Patient Workflow
+
+Patient opens dashboard
+
+System fetches data from server
+
+Live hospital resources displayed
 
 ### GET /hospitals
 
