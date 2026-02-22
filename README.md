@@ -1,4 +1,4 @@
-# medhub
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/a4c1d91b-e67f-4e39-9679-171b6fea2b30" alt="Screenshot_22-2-2026_153419 " width="100%">
 </p>
@@ -87,17 +87,19 @@ List the key features of your project:
 
 ![Screenshot1]Homepage
 It shows the main homepage of the web 'MEDHUB'
-<img width="1910" height="915" alt="screenshot-1771642471766" src="https://github.com/user-attachments/assets/8a69b2a5-0ae6-42de-912c-4dab09a4aaed" />
+<img width="1910" height="915" alt="1" src="https://github.com/user-attachments/assets/b929c744-63f5-4501-b260-1b0ed468fbf1" />
+
 
 
 ![Screenshot2]Login Page-Admin
 It shows the login page for the admin corner
-<img width="1910" height="915" alt="screenshot-1771642559686" src="https://github.com/user-attachments/assets/d95e7251-af20-4160-8bf4-2ca7e615923c" />
+<img width="1910" height="915" alt="2" src="https://github.com/user-attachments/assets/7f45ade0-82af-48a2-aec7-3debbb03fb23" />
+
 
 
 ![Screenshot3]Login page-Patient
 it shows the login page for the patient/user corner
-<img width="1910" height="915" alt="screenshot-1771642519498" src="https://github.com/user-attachments/assets/cfc0cf39-3930-4bfb-99ee-e47852474b8f" />
+<img width="1910" height="915" alt="3" src="https://github.com/user-attachments/assets/13371bd8-d847-4fc0-8b1e-7efa3f0ecad5" />
 
 
 #### Diagrams
