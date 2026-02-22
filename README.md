@@ -1,7 +1,6 @@
 # medhub
 <p align="center">
-  <img src="![Screenshot_21-2-2026_84630_medhub-phi vercel app](https://github.com/user-attachments/assets/d749daeb-2fe4-421a-9003-5cafaeb3a0d7)
-" alt="Project Banner" width="100%">
+  <img src="https://github.com/user-attachments/assets/a4c1d91b-e67f-4e39-9679-171b6fea2b30" alt="Screenshot_22-2-2026_153419 " width="100%">
 </p>
 
 # MedHub 🎯
