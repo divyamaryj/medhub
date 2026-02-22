@@ -119,6 +119,24 @@
             align-items: center;
         }
 
+        /* Make the theme toggle small and inline when placed inside the nav */
+        .nav-container .theme-toggle {
+            position: static;
+            top: auto;
+            right: auto;
+            width: 44px;
+            height: 44px;
+            font-size: 20px;
+            border-radius: 8px;
+            border: 2px solid rgba(13, 11, 11, 0.9);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            margin-left: 12px;
+            transform: none;
+            align-self: center;
+            z-index: 60;
+            padding: 0;
+        }
+
         .nav-brand {
             font-size: 28px;
             font-weight: 800;
@@ -142,7 +160,6 @@
 
         .nav-brand:hover {
             transform: scale(1.08);
-            background: rgba(59, 130, 246, 0.1);
         }
 
         @keyframes pulse-brand {
@@ -198,7 +215,7 @@
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            border: 4px solid white;
+            border: 4px solid rgb(13, 11, 11);
         }
 
         .light-theme .theme-toggle {
@@ -927,11 +944,12 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <button class="nav-brand" onclick="goToLanding(); return false;" style="background: none; border: none; cursor: pointer;">🏥 MEDHUB</button>
+            <button class="nav-brand" onclick="goToLanding(); return false;">🏥 MEDHUB</button>
             <div class="nav-links">
                 <button class="nav-link" onclick="goToLanding(); return false;">HOME</button>
                 <button class="nav-link" onclick="showAbout(); return false;">ABOUT</button>
             </div>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
         </div>
     </nav>
 
@@ -1602,5 +1620,4 @@
         
     </script>
 </body>
-
 </html>
