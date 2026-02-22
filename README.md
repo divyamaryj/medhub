@@ -221,7 +221,7 @@ Live hospital resources displayed
 {
   "status": "success"
 }
-
+```
 
 ## AI Tools Used (Optional - For Transparency Bonus)
 
